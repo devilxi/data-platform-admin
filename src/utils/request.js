@@ -1,14 +1,14 @@
 import axios from 'axios'
 import router from '@/router/routers'
-import {Notification, MessageBox} from 'element-ui'
+import { Notification, MessageBox } from 'element-ui'
 import store from '../store'
-import {getToken} from '@/utils/auth'
+import { getToken } from '@/utils/auth'
 import Config from '@/settings'
 
 // 创建axios实例
 const service = axios.create({
   // baseURL: process.env.NODE_ENV === 'production' ? process.env.VUE_APP_BASE_API : '/', // api 的 base_url
-  baseURL: 'http://139.159.219.238:8008',
+  baseURL: 'http://localhost:8008',
   timeout: Config.timeout // 请求超时时间
 })
 
@@ -70,7 +70,7 @@ service.interceptors.response.use(
           })
         })
       } else if (code === 403) {
-        router.push({path: '/401'})
+        router.push({ path: '/401' })
       } else {
         const errorMsg = error.response.data.message
         if (errorMsg !== undefined) {
