@@ -2,14 +2,30 @@
   <div class="app-container">
     <!--工具栏-->
     <div class="head-container">
+      <div v-if="crud.props.searchToggle">
+        <!-- 搜索 -->
+        <el-input v-model="query.value" clearable placeholder="输入搜索内容" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <el-select v-model="query.type" clearable placeholder="类型" class="filter-item" style="width: 130px">
+          <el-option v-for="item in queryTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
+        </el-select>
+        <el-date-picker
+          v-model="query.createTime"
+          :default-time="['00:00:00','23:59:59']"
+          type="daterange"
+          range-separator=":"
+          size="small"
+          class="date-item"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          start-placeholder="createTimeStart"
+          end-placeholder="createTimeEnd"
+        />
+        <rrOperation :crud="crud" />
+      </div>
       <!--如果想在工具栏加入更多按钮，可以使用插槽方式， slot = 'left' or 'right'-->
       <crudOperation :permission="permission" />
       <!--表单组件-->
       <el-dialog :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="500px">
         <el-form ref="form" :model="form" :rules="rules" size="small" label-width="80px">
-          <el-form-item label="ID" prop="id">
-            <el-input v-model="form.id" style="width: 370px;" />
-          </el-form-item>
           <el-form-item label="姓名" prop="name">
             <el-input v-model="form.name" style="width: 370px;" />
           </el-form-item>
@@ -17,7 +33,7 @@
             <el-input v-model="form.sex" style="width: 370px;" />
           </el-form-item>
           <el-form-item label="创建日期">
-            <el-input v-model="form.createTime" style="width: 370px;" />
+            <el-date-picker v-model="form.createTime" type="datetime" style="width: 370px;" />
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -28,7 +44,6 @@
       <!--表格渲染-->
       <el-table ref="table" v-loading="crud.loading" :data="crud.data" size="small" style="width: 100%;" @selection-change="crud.selectionChangeHandler">
         <el-table-column type="selection" width="55" />
-        <el-table-column prop="id" label="ID" />
         <el-table-column prop="name" label="姓名" />
         <el-table-column prop="sex" label="性别" />
         <el-table-column prop="createTime" label="创建日期">
@@ -75,17 +90,23 @@ export default {
         del: ['admin', 'demoTest:del']
       },
       rules: {
-        id: [
-          { required: true, message: 'ID不能为空', trigger: 'blur' }
-        ],
         name: [
           { required: true, message: '姓名不能为空', trigger: 'blur' }
         ]
-      }}
+      },
+      queryTypeOptions: [
+        { key: 'name', display_name: '姓名' },
+        { key: 'sex', display_name: '性别' }
+      ]
+    }
   },
   methods: {
     // 获取数据前设置好接口地址
     [CRUD.HOOK.beforeRefresh]() {
+      const query = this.query
+      if (query.type && query.value) {
+        this.crud.params[query.type] = query.value
+      }
       return true
     }
   }
