@@ -12,9 +12,9 @@ const port = 9000 // 端口配置
 
 module.exports = {
   publicPath: '/',
-  outputDir: 'dist3',
+  outputDir: 'dist',
   assetsDir: 'static',
-  lintOnSave: process.env.NODE_ENV === 'development',
+  lintOnSave: process.env.NODE_ENV === 'production',
   productionSourceMap: false,
   devServer: {
     port: port,
@@ -87,7 +87,8 @@ module.exports = {
     config
       // https://webpack.js.org/configuration/devtool/#development
       .when(process.env.NODE_ENV === 'development',
-        config => config.devtool('cheap-source-map')
+        // config => config.devtool('cheap-source-map')
+        config => config.devtool('eval')
       )
 
     config
