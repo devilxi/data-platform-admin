@@ -6,6 +6,7 @@ import { getToken } from '@/utils/auth'
 import Config from '@/settings'
 
 // 创建axios实例
+console.log(process.env.NODE_ENV, '============>process.env.NODE_ENV')
 const service = axios.create({
   baseURL: process.env.NODE_ENV === 'production' ? process.env.VUE_APP_BASE_API : '/', // api 的 base_url
   timeout: Config.timeout // 请求超时时间
