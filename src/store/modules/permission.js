@@ -23,6 +23,7 @@ export const filterAsyncRouter = (routers) => { // 遍历后台传来的路由�
   return routers.filter(router => {
     if (router.component) {
       if (router.component === 'Layout') { // Layout组件特殊处理
+        console.log(router, '===================>router')
         router.component = Layout
       } else {
         const component = router.component

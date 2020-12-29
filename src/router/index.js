@@ -11,6 +11,7 @@ NProgress.configure({ showSpinner: false })// NProgress Configuration
 
 const whiteList = ['/login']// no redirect whitelist
 
+// 全局路由守卫
 router.beforeEach((to, from, next) => {
   if (to.meta.title) {
     document.title = to.meta.title + ' - ' + Config.title
@@ -32,7 +33,7 @@ router.beforeEach((to, from, next) => {
             location.reload() // 为了重新实例化vue-router对象 避免bug
           })
         })
-      // 登录时未拉取 菜单，在此处拉取
+        // 登录时未拉取 菜单，在此处拉取
       } else if (store.getters.loadMenus) {
         // 修改成false，防止死循环
         store.dispatch('updateLoadMenus').then(res => {})
@@ -56,9 +57,10 @@ export const loadMenus = (next, to) => {
   buildMenus().then(res => {
     const asyncRouter = filterAsyncRouter(res)
     asyncRouter.push({ path: '*', redirect: '/404', hidden: true })
+    console.log(asyncRouter, '================>asyncRouter')
     store.dispatch('GenerateRoutes', asyncRouter).then(() => { // 存储路由
       router.addRoutes(asyncRouter) // 动态添加可访问路由表
-      next({ ...to, replace: true })
+      next({ ...to, replace: true }) // 不会保存之前的页面记录
     })
   })
 }

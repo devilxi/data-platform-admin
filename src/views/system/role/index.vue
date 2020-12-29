@@ -303,6 +303,7 @@ export default {
       depts.forEach(dept => {
         ids.push(dept.id)
       })
+      console.log(ids, '===================>ids')
       getDeptSuperior(ids).then(res => {
         this.depts = res.content.map(function(obj) {
           if (obj.hasChildren && !obj.children) {
@@ -342,21 +343,21 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-  .role-span {
-    font-weight: bold;color: #303133;
-    font-size: 15px;
-  }
+.role-span {
+  font-weight: bold;color: #303133;
+  font-size: 15px;
+}
 </style>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  /deep/ .el-input-number .el-input__inner {
-    text-align: left;
-  }
-  /deep/ .vue-treeselect__multi-value{
-    margin-bottom: 0;
-  }
-  /deep/ .vue-treeselect__multi-value-item{
-    border: 0;
-    padding: 0;
-  }
+/deep/ .el-input-number .el-input__inner {
+  text-align: left;
+}
+/deep/ .vue-treeselect__multi-value{
+  margin-bottom: 0;
+}
+/deep/ .vue-treeselect__multi-value-item{
+  border: 0;
+  padding: 0;
+}
 </style>
